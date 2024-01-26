@@ -5,17 +5,12 @@ import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 import { options } from "./config/swagger-options.js";
 import connectToDb from "./config/db.js";
-
 const app = express();
 const PORT = 3000;
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
 const specs = swaggerJsdoc(options);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs, { explorer: true }));
-
 app.use("/api/auth", authRoutes);
 app.use("/api", userRoutes);
-
 connectToDb().then(() => app.listen(PORT));

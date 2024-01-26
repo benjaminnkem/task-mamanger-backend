@@ -1,6 +1,5 @@
-import { User } from "./user.interface.js";
-
 export interface Category {
+  _id: string;
   name: string;
   description: string;
   user: {
