@@ -6,7 +6,7 @@ import {
   updateCategory,
 } from "../../services/categories/category.service.js";
 import { jwtGuard } from "../../../../guards/jwt.guard.js";
-import { findUserByEmail } from "../../services/users/user.services.js";
+import { findUserByEmail } from "../../../users/services/users/user.services.js";
 import {
   validateCategoryBody,
   validateCategoryUpdate,

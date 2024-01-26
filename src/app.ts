@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 import authRoutes from "./routes/auth/controllers/auth.controller.js";
 import userRoutes from "./routes/users/main.js";
+import taskRoutes from "./routes/tasks/main.js";
 import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 import { options } from "./config/swagger-options.js";
@@ -17,6 +18,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs, { explorer: true })
 
 app.use("/api/auth", authRoutes);
 app.use("/api", userRoutes);
+app.use("/api", taskRoutes);
 
 app.use((req: Request, res: Response) => {
   res.status(404).json({
