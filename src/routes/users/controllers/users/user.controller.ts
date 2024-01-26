@@ -1,9 +1,9 @@
 import { Router, Request, Response } from "express";
-import { jwtGuard } from "../../../guards/jwt.guard.js";
-import { User } from "../../../interfaces/user.interface.js";
-import connectToDb from "../../../config/db.js";
-import { findUserById, updateUser } from "../services/user.services.js";
-import { userUpdateValidate, validateRequest } from "../../../middlewares/user-validation.middleware.js";
+import { jwtGuard } from "../../../../guards/jwt.guard.js";
+import { User } from "../../../../interfaces/user.interface.js";
+import connectToDb from "../../../../config/db.js";
+import { findUserById, updateUser } from "../../services/users/user.services.js";
+import { userUpdateValidate, validateRequest } from "../../../../middlewares/user-validation.middleware.js";
 
 const router = Router();
 

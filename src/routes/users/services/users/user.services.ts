@@ -1,5 +1,5 @@
-import { User, UserRegisterDto } from "../../../interfaces/user.interface.js";
-import user from "../../../models/user.js";
+import { User, UserRegisterDto } from "../../../../interfaces/user.interface.js";
+import user from "../../../../models/user.js";
 import bcryptjs from "bcryptjs";
 
 const { compare } = bcryptjs;

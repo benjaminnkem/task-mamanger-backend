@@ -9,7 +9,7 @@ import {
   userRegisterBodyValidate,
   validateRequest,
 } from "../../../middlewares/user-validation.middleware.js";
-import { createUser, findUserByEmail, verifyUserWithPassword } from "../../users/services/user.services.js";
+import { createUser, findUserByEmail, verifyUserWithPassword } from "../../users/services/users/user.services.js";
 import jwt from "jsonwebtoken";
 import "dotenv/config";
 
@@ -60,7 +60,7 @@ router.post("/register", userRegisterBodyValidate, validateRequest, async (req: 
 router.post("/login", userLoginValidate, validateRequest, async (req: Request, res: Response) => {
   const body = req.body;
 
-  const EXPIRY_TIME = "15m";
+  const EXPIRY_TIME = "1h";
 
   try {
     await connectToDb();

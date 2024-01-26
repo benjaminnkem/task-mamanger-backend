@@ -1,6 +1,6 @@
 import express from "express";
 import authRoutes from "./routes/auth/controllers/auth.controller.js";
-import userRoutes from "./routes/users/controllers/user.controller.js";
+import userRoutes from "./routes/users/main.js";
 import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 import { options } from "./config/swagger-options.js";
@@ -15,6 +15,6 @@ const specs = swaggerJsdoc(options);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs, { explorer: true }));
 
 app.use("/api/auth", authRoutes);
-app.use("/api/user", userRoutes);
+app.use("/api", userRoutes);
 
 app.listen(PORT);
