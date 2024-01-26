@@ -61,6 +61,8 @@ router.post("/register", userRegisterBodyValidate, validateRegister, async (req:
 router.post("/login", userLoginValidate, validateLogin, async (req: Request, res: Response) => {
   const body = req.body;
 
+  const EXPIRY_TIME = "15m";
+
   try {
     await connectToDb();
 
@@ -79,17 +81,27 @@ router.post("/login", userLoginValidate, validateLogin, async (req: Request, res
       lastName: user.lastName,
     };
 
-    const accessToken = sign(payloadToSign, process.env.JWT_SECRET as string, {
-      expiresIn: "15m",
+    const secret = process.env.JWT_SECRET;
+    const refreshSecret = process.env.JWT_REFRESH_SECRET;
+
+    if (!secret || !refreshSecret) {
+      return res.status(500).json({
+        message: "Internal Server Error",
+      });
+    }
+
+    const accessToken = sign(payloadToSign, secret, {
+      expiresIn: EXPIRY_TIME,
     });
 
-    const refreshToken = sign(payloadToSign, process.env.JWT_REFRESH_SECRET as string, {
+    const refreshToken = sign(payloadToSign, refreshSecret, {
       expiresIn: "7d",
     });
 
     const payload = {
       accessToken,
       refreshToken,
+      expiresIn: EXPIRY_TIME,
     };
 
     return res.status(200).json(payload);
