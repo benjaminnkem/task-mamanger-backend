@@ -7,8 +7,7 @@ import { validationResult } from "express-validator";
 import {
   userLoginValidate,
   userRegisterBodyValidate,
-  validateLogin,
-  validateRegister,
+  validateRequest,
 } from "../../../middlewares/user-validation.middleware.js";
 import { createUser, findUserByEmail, verifyUserWithPassword } from "../../users/services/user.services.js";
 import jwt from "jsonwebtoken";
@@ -18,7 +17,7 @@ const router = Router();
 const { hash } = bcryptjs;
 const { sign } = jwt;
 
-router.post("/register", userRegisterBodyValidate, validateRegister, async (req: Request, res: Response) => {
+router.post("/register", userRegisterBodyValidate, validateRequest, async (req: Request, res: Response) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
@@ -58,7 +57,7 @@ router.post("/register", userRegisterBodyValidate, validateRegister, async (req:
   }
 });
 
-router.post("/login", userLoginValidate, validateLogin, async (req: Request, res: Response) => {
+router.post("/login", userLoginValidate, validateRequest, async (req: Request, res: Response) => {
   const body = req.body;
 
   const EXPIRY_TIME = "15m";
@@ -75,7 +74,7 @@ router.post("/login", userLoginValidate, validateLogin, async (req: Request, res
     if (!verify) return res.status(401).json({ message: "Wrong password" });
 
     const payloadToSign = {
-      id: user._id,
+      id: user.id,
       email: user.email,
       firstName: user.firstName,
       lastName: user.lastName,
@@ -101,7 +100,7 @@ router.post("/login", userLoginValidate, validateLogin, async (req: Request, res
     const payload = {
       accessToken,
       refreshToken,
-      expiresIn: EXPIRY_TIME,
+      expiresIn: new Date().setTime(new Date().getTime() + 60 * 1000 * 15),
     };
 
     return res.status(200).json(payload);

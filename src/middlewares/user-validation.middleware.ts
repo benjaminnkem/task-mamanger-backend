@@ -10,16 +10,13 @@ export const userRegisterBodyValidate = [
 
 export const userLoginValidate = [body("email").isEmail(), body("password").isString().isLength({ min: 8 })];
 
-export const validateRegister = (req: Request, res: Response, next: NextFunction) => {
-  const errors = validationResult(req);
+export const userUpdateValidate = [
+  body("firstName").notEmpty().isString(),
+  body("lastName").notEmpty().isString(),
+  body("email").isEmail(),
+];
 
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
-  next();
-};
-
-export const validateLogin = (req: Request, res: Response, next: NextFunction) => {
+export const validateRequest = (req: Request, res: Response, next: NextFunction) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
