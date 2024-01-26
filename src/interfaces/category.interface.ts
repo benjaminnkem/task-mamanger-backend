@@ -1,5 +1,4 @@
-export interface Category {
-  _id: string;
+export interface CreateCategoryDto {
   name: string;
   description: string;
   user: {
@@ -8,4 +7,8 @@ export interface Category {
     firstName: string;
     lastName: string;
   };
+}
+
+export interface UpdateCategoryDto extends CreateCategoryDto {
+  _id: string;
 }

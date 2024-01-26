@@ -1,4 +1,4 @@
-import { Category } from "../../../../interfaces/category.interface.js";
+import { CreateCategoryDto, UpdateCategoryDto } from "../../../../interfaces/category.interface.js";
 import { User } from "../../../../interfaces/user.interface.js";
 import category from "../../../../models/category.js";
 import { ObjectId } from "mongodb";
@@ -7,7 +7,7 @@ export const findCategoryByNameAndUser = async (categoryName: string, userId: st
   return await category.findOne({ name: categoryName, user: { _id: new ObjectId(userId) } });
 };
 
-export const addCategory = async (categoryDto: Category) => {
+export const addCategory = async (categoryDto: CreateCategoryDto) => {
   const categoryExists = await findCategoryByNameAndUser(categoryDto.name, categoryDto.user._id);
 
   if (categoryExists) throw new Error("Category already exists");
@@ -15,13 +15,15 @@ export const addCategory = async (categoryDto: Category) => {
   await category.create(categoryDto);
 };
 
-export const updateCategory = async (categoryDto: Category) => {
+export const deleteCategory = async (categoryId: string) => await category.deleteOne({ _id: new ObjectId(categoryId) });
+
+export const updateCategory = async (categoryDto: UpdateCategoryDto) => {
   await category.updateOne(
-    { name: categoryDto.name, user: { _id: new ObjectId(categoryDto.user._id) } },
+    { _id: new ObjectId(categoryDto._id), user: { _id: new ObjectId(categoryDto.user._id) } },
     { ...categoryDto, updatedAt: new Date() }
   );
 };
 
-export const findCategoriesByUser = async (user: User): Promise<Category[] | null> => {
-  return (await category.find({ user: { _id: new ObjectId(user.id) } })) as Category[];
+export const findCategoriesByUser = async (user: User): Promise<UpdateCategoryDto[] | null> => {
+  return (await category.find({ user: { _id: new ObjectId(user.id) } })) as UpdateCategoryDto[];
 };

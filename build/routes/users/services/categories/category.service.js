@@ -9,8 +9,9 @@ export const addCategory = async (categoryDto) => {
         throw new Error("Category already exists");
     await category.create(categoryDto);
 };
+export const deleteCategory = async (categoryId) => await category.deleteOne({ _id: new ObjectId(categoryId) });
 export const updateCategory = async (categoryDto) => {
-    await category.updateOne({ name: categoryDto.name, user: { _id: new ObjectId(categoryDto.user._id) } }, { ...categoryDto, updatedAt: new Date() });
+    await category.updateOne({ _id: new ObjectId(categoryDto._id), user: { _id: new ObjectId(categoryDto.user._id) } }, { ...categoryDto, updatedAt: new Date() });
 };
 export const findCategoriesByUser = async (user) => {
     return (await category.find({ user: { _id: new ObjectId(user.id) } }));

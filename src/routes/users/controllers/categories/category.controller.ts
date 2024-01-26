@@ -1,5 +1,10 @@
 import { Router, Request, Response } from "express";
-import { addCategory, findCategoriesByUser, updateCategory } from "../../services/categories/category.service.js";
+import {
+  addCategory,
+  deleteCategory,
+  findCategoriesByUser,
+  updateCategory,
+} from "../../services/categories/category.service.js";
 import { jwtGuard } from "../../../../guards/jwt.guard.js";
 import { findUserByEmail } from "../../services/users/user.services.js";
 import {
@@ -8,6 +13,7 @@ import {
 } from "../../../../middlewares/category-validation.middleware.js";
 import { validateRequest } from "../../../../middlewares/index.js";
 import connectToDb from "../../../../config/db.js";
+import { CreateCategoryDto } from "../../../../interfaces/category.interface.js";
 
 const router = Router();
 
@@ -30,7 +36,7 @@ router.get("/", jwtGuard, async (req: Request, res: Response) => {
 router.post("/new", jwtGuard, validateCategoryBody, validateRequest, async (req: Request, res: Response) => {
   // @ts-ignore
   const userPayload = req.user;
-  const body = req.body;
+  const body = req.body as CreateCategoryDto;
 
   try {
     await connectToDb();
@@ -38,7 +44,11 @@ router.post("/new", jwtGuard, validateCategoryBody, validateRequest, async (req:
 
     if (!user) return res.status(401).json({ message: "User not found" });
 
-    await addCategory(body);
+    await addCategory({
+      name: body.name,
+      description: body.description,
+      user: { ...body.user },
+    });
 
     res.status(201).json();
   } catch (e: any) {
@@ -59,7 +69,20 @@ router.patch("/", jwtGuard, validateCategoryUpdate, validateRequest, async (req:
 
     await updateCategory(body);
 
-    res.status(201).json();
+    res.status(204).json();
+  } catch (e: any) {
+    return res.status(500).json({ message: e.message ?? "Internal server error" });
+  }
+});
+
+router.delete("/:id", jwtGuard, async (req: Request, res: Response) => {
+  try {
+    await connectToDb();
+    const categoryId = req.params.id;
+
+    await deleteCategory(categoryId);
+
+    res.status(204).json();
   } catch (e: any) {
     return res.status(500).json({ message: e.message ?? "Internal server error" });
   }
