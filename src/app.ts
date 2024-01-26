@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import authRoutes from "./routes/auth/controllers/auth.controller.js";
 import userRoutes from "./routes/users/main.js";
 import swaggerJsdoc from "swagger-jsdoc";
@@ -17,5 +17,18 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs, { explorer: true })
 
 app.use("/api/auth", authRoutes);
 app.use("/api", userRoutes);
+
+app.use((req: Request, res: Response) => {
+  res.status(404).json({
+    message: "Not found",
+  });
+});
+
+app.use((err: any, req: Request, res: Response) => {
+  console.log(err);
+  res.status(500).json({
+    message: "Some error occurred",
+  });
+});
 
 connectToDb().then(() => app.listen(PORT));

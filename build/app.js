@@ -13,4 +13,15 @@ const specs = swaggerJsdoc(options);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs, { explorer: true }));
 app.use("/api/auth", authRoutes);
 app.use("/api", userRoutes);
+app.use((req, res) => {
+    res.status(404).json({
+        message: "Not found",
+    });
+});
+app.use((err, req, res) => {
+    console.log(err);
+    res.status(500).json({
+        message: "Some error occurred",
+    });
+});
 connectToDb().then(() => app.listen(PORT));
