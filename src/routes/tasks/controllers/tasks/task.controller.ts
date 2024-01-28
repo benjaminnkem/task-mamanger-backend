@@ -1,10 +1,12 @@
 import { Router, Request, Response } from "express";
 import { jwtGuard } from "../../../../guards/jwt.guard.js";
 import connectToDb from "../../../../config/db.js";
+import { validate } from "../../../../middlewares/index.js";
+import { createTaskSchema } from "../../../../middlewares/validator/task.validator.js";
 
 const router = Router();
 
-router.get("/:userId", jwtGuard, async (req: Request, res: Response) => {
+router.get("/:userId", jwtGuard, validate(createTaskSchema), async (req: Request, res: Response) => {
   const userId = req.params.userId;
 
   try {
@@ -14,8 +16,6 @@ router.get("/:userId", jwtGuard, async (req: Request, res: Response) => {
 
     return res.status(200).json({});
   } catch (e: any) {
-    console.log(e);
-
     return res.status(500).json({ message: "Internal server error" });
   }
 });

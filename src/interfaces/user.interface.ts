@@ -4,9 +4,6 @@ export interface User {
   password: string;
   firstName: string;
   lastName: string;
-  image?: string;
-  // createdAt: Date;
-  // updatedAt: Date;
 }
 
 export interface UserRegisterDto {
@@ -15,8 +12,6 @@ export interface UserRegisterDto {
   firstName: string;
   lastName: string;
   image?: string;
-  // createdAt: Date;
-  // updatedAt: Date;
 }
 
 export interface UserLoginDto {
