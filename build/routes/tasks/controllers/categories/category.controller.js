@@ -7,7 +7,6 @@ import { validateRequest } from "../../../../middlewares/index.js";
 import connectToDb from "../../../../config/db.js";
 const router = Router();
 router.get("/", jwtGuard, async (req, res) => {
-    // @ts-ignore
     const userPayload = req.user;
     try {
         await connectToDb();
@@ -20,7 +19,6 @@ router.get("/", jwtGuard, async (req, res) => {
     }
 });
 router.post("/new", jwtGuard, validateCategoryBody, validateRequest, async (req, res) => {
-    // @ts-ignore
     const userPayload = req.user;
     const body = req.body;
     try {
@@ -40,7 +38,6 @@ router.post("/new", jwtGuard, validateCategoryBody, validateRequest, async (req,
     }
 });
 router.patch("/", jwtGuard, validateCategoryUpdate, validateRequest, async (req, res) => {
-    // @ts-ignore
     const userPayload = req.user;
     const body = req.body;
     try {

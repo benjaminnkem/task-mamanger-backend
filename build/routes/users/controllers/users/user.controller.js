@@ -5,7 +5,6 @@ import { findUserById, updateUser } from "../../services/users/user.services.js"
 import { userUpdateValidate, validateRequest } from "../../../../middlewares/user-validation.middleware.js";
 const router = Router();
 router.get("/", jwtGuard, async (req, res) => {
-    // @ts-ignore
     const userPayload = req.user;
     try {
         await connectToDb();

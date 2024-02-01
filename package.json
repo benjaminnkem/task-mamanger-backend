@@ -6,8 +6,7 @@
   "main": "app.js",
   "scripts": {
     "build": "tsc",
-    "dev": "tsc && nodemon build/app.js",
-    "start": "tsc && ts-node build/app.js"
+    "dev": "tsc && nodemon build/app.js"
   },
   "keywords": [],
   "author": "",

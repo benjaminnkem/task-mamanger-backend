@@ -7,6 +7,7 @@ import { userLoginValidate, userRegisterBodyValidate, validateRequest, } from ".
 import { createUser, findUserByEmail, verifyUserWithPassword } from "../../users/services/users/user.services.js";
 import jwt from "jsonwebtoken";
 import "dotenv/config";
+import { refreshJwtGuard } from "../../../guards/refresh-jwt.guard.js";
 const router = Router();
 const { hash } = bcryptjs;
 const { sign } = jwt;
@@ -82,6 +83,40 @@ router.post("/login", userLoginValidate, validateRequest, async (req, res) => {
     }
     catch (e) {
         return res.status(500).json({ error: "Internal Server Error" });
+    }
+});
+router.get("/refresh-token", refreshJwtGuard, async (req, res) => {
+    const user = req.user;
+    const EXPIRY_TIME = "1h";
+    const payloadToSign = {
+        id: user.id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+    };
+    const secret = process.env.JWT_SECRET;
+    const refreshSecret = process.env.JWT_REFRESH_SECRET;
+    if (!secret || !refreshSecret) {
+        return res.status(500).json({
+            message: "Internal Server Error",
+        });
+    }
+    const accessToken = sign(payloadToSign, secret, {
+        expiresIn: EXPIRY_TIME,
+    });
+    const refreshToken = sign(payloadToSign, refreshSecret, {
+        expiresIn: "7d",
+    });
+    const payload = {
+        accessToken,
+        refreshToken,
+        expiresIn: new Date().setTime(new Date().getTime() + 60 * 1000 * 15),
+    };
+    try {
+        return res.status(200).json(payload);
+    }
+    catch {
+        res.status(500).json({ error: "Internal Server Error" });
     }
 });
 export default router;

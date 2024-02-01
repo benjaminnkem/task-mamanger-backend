@@ -5,16 +5,16 @@ const extractToken = (req) => {
     const [type, token] = req.headers.authorization.split(" ");
     return { type, token };
 };
-export const jwtGuard = (req, res, next) => {
+export const refreshJwtGuard = (req, res, next) => {
     const extracted = extractToken(req);
     if (!extracted) {
         return res.status(401).json({
             message: "No token provided",
         });
     }
-    if (extracted.type !== "Bearer") {
+    if (extracted.type !== "Refresh") {
         return res.status(401).json({
-            message: `${extracted.type} is not a valid type, use Bearer instead.`,
+            message: `${extracted.type} is not a valid type, use Refresh instead.`,
         });
     }
     const { token } = extracted;
@@ -23,7 +23,7 @@ export const jwtGuard = (req, res, next) => {
             message: "No token provided",
         });
     }
-    const secret = process.env.JWT_SECRET;
+    const secret = process.env.JWT_REFRESH_SECRET;
     if (!secret) {
         return res.status(500).json({
             message: "Internal Server Error",
