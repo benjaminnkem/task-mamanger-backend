@@ -4,8 +4,6 @@
 
 🚀 Welcome to the Task Manager App – a powerful and intuitive task management application designed to help you stay organized and boost productivity!
 
-<!-- ![Task Manager App](link-to-your-app-screenshot.png) -->
-
 ## Features
 
 - **Effortless Task Management:** Easily create, edit, and delete tasks with a user-friendly interface.
@@ -13,6 +11,7 @@
 - **Due Date Reminders:** Set due dates and receive timely reminders to stay on top of your tasks.
 - **User Authentication:** Create an account to sync your tasks across devices securely.
 - **Responsive Design:** Access your tasks seamlessly from desktops, tablets, and smartphones.
+- and so much more...
 
 ## Getting Started
 
